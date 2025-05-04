@@ -5,9 +5,6 @@ import re
 
 dirs_to_ignore: list[str] = [
     "__pycache__",
-    ".git",
-    ".mypy_cache",
-    ".pytest_cache",
     "build",
     "dist",
     "lib",
@@ -33,8 +30,8 @@ def main():
         for dirname in reversed(dirnames):
             i -= 1
             if (
-                dirname.startswith("venv")
-                or dirname.startswith(".venv")
+                dirname.startswith(".")
+                or dirname.startswith("venv")
                 or dirname in dirs_to_ignore
             ):
                 del dirnames[i]
