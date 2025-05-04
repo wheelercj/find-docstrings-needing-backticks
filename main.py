@@ -3,8 +3,6 @@ import os
 import re
 
 
-venv_name_pattern: re.Pattern = re.compile(r"^\.?venv\d*$")
-
 docstring_pattern: re.Pattern = re.compile(r'""".*?"""', re.DOTALL)
 identifier_pattern: re.Pattern = re.compile(r"(?<!`)\b[^\W_]\w*__?\b(?!`)")
 
@@ -23,9 +21,11 @@ def main():
         i = len(dirnames)
         for dirname in reversed(dirnames):
             i -= 1
-            if venv_name_pattern.match(dirname):
-                del dirnames[i]
-            elif dirname in ("__pycache__", "dist", "build", "lib"):
+            if (
+                dirname.startswith("venv")
+                or dirname.startswith(".venv")
+                or dirname in ("__pycache__", "dist", "build", "lib")
+            ):
                 del dirnames[i]
 
         # search this folder
