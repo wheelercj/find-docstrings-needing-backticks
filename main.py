@@ -3,6 +3,17 @@ import os
 import re
 
 
+dirs_to_ignore: list[str] = [
+    "__pycache__",
+    ".git",
+    ".mypy_cache",
+    ".pytest_cache",
+    "build",
+    "dist",
+    "lib",
+    "logs",
+]
+
 docstring_pattern: re.Pattern = re.compile(r'""".*?"""', re.DOTALL)
 identifier_pattern: re.Pattern = re.compile(r"(?<!`)\b[^\W_]\w*__?\b(?!`)")
 
@@ -24,7 +35,7 @@ def main():
             if (
                 dirname.startswith("venv")
                 or dirname.startswith(".venv")
-                or dirname in ("__pycache__", "dist", "build", "lib")
+                or dirname in dirs_to_ignore
             ):
                 del dirnames[i]
 
