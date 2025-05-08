@@ -25,6 +25,7 @@ def main():
     args: argparse.Namespace = parser.parse_args()
     dir: str = args.dir
 
+    bad_identifier_count: int = 0
     for dirpath, dirnames, filenames in os.walk(dir, topdown=True):
         # remove any subfolders that should not be searched
         i = len(dirnames)
@@ -38,7 +39,6 @@ def main():
                 del dirnames[i]
 
         # search this folder
-        count: int = 0
         for file in filenames:
             if file.endswith(".py"):
                 filepath: str = os.path.join(dirpath, file)
@@ -48,7 +48,7 @@ def main():
                 for docstring_match in docstring_pattern.finditer(content):
                     docstring: str = docstring_match.group(0)
                     for identifier_match in identifier_pattern.finditer(docstring):
-                        count += 1
+                        bad_identifier_count += 1
 
                         identifier_name: str = identifier_match.group(0)
                         start: int = docstring_match.start() + docstring.find(identifier_name)
@@ -56,8 +56,8 @@ def main():
 
                         print(f"{filepath}:{line_number}: '{identifier_name}' needs backticks")
 
-        if count > 0:
-            sys.exit(1)
+    if bad_identifier_count > 0:
+        sys.exit(1)
 
 
 if __name__ == "__main__":
