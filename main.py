@@ -6,10 +6,14 @@ import sys
 
 dirs_to_ignore: list[str] = [
     "__pycache__",
+    "__pypackages__",
+    "_build",
     "build",
     "dist",
     "lib",
     "logs",
+    "node_modules",
+    "site-packages",
 ]
 
 docstring_pattern: re.Pattern = re.compile(r'""".*?"""', re.DOTALL)
