@@ -16,6 +16,11 @@ dirs_to_ignore: list[str] = [
     "site-packages",
 ]
 
+dir_prefixes_to_ignore: list[str] = [
+    ".",
+    "venv",
+]
+
 docstring_pattern: re.Pattern = re.compile(r'""".*?"""', re.DOTALL)
 identifier_pattern: re.Pattern = re.compile(r"(?<!`)\b[^\W_]\w*__?\b(?!`)")
 
@@ -35,12 +40,12 @@ def main():
         i = len(dirnames)
         for dirname in reversed(dirnames):
             i -= 1
-            if (
-                dirname.startswith(".")
-                or dirname.startswith("venv")
-                or dirname in dirs_to_ignore
-            ):
+            if dirname in dirs_to_ignore:
                 del dirnames[i]
+            for prefix in dir_prefixes_to_ignore:
+                if dirname.startswith(prefix):
+                    del dirnames[i]
+                    break
 
         # search this folder
         for file in filenames:
